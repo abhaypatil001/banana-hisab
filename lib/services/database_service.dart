@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import '../models/transaction.dart';
+import '../models/transaction.dart' as models;
 import '../models/party.dart';
 
 class DatabaseService {
@@ -64,15 +64,15 @@ class DatabaseService {
   }
 
   // Transaction operations
-  Future<void> insertTransaction(Transaction transaction) async {
+  Future<void> insertTransaction(models.Transaction transaction) async {
     final db = await database;
     await db.insert('transactions', transaction.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future<List<Transaction>> getTransactions() async {
+  Future<List<models.Transaction>> getTransactions() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('transactions', orderBy: 'date DESC');
-    return List.generate(maps.length, (i) => Transaction.fromMap(maps[i]));
+    return List.generate(maps.length, (i) => models.Transaction.fromMap(maps[i]));
   }
 
   Future<void> deleteTransaction(String id) async {
@@ -80,7 +80,7 @@ class DatabaseService {
     await db.delete('transactions', where: 'id = ?', whereArgs: [id]);
   }
 
-  Future<void> updateTransaction(Transaction transaction) async {
+  Future<void> updateTransaction(models.Transaction transaction) async {
     final db = await database;
     await db.update('transactions', transaction.toMap(), where: 'id = ?', whereArgs: [transaction.id]);
   }
