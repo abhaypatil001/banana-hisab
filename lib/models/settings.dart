@@ -15,11 +15,11 @@ class AppSettings {
 
   factory AppSettings.defaults() {
     return AppSettings(
-      defaultPattiRate: 2.0,
-      standardDandaRate: 2.0,
-      highDandaRate: 3.0,
-      commission: 1.0,
-      majuri: 1.0,
+      defaultPattiRate: 7.5,
+      standardDandaRate: 6.0,
+      highDandaRate: 7.0,
+      commission: 10.0,
+      majuri: 30.0,
     );
   }
 

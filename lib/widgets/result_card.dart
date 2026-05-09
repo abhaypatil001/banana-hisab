@@ -35,7 +35,7 @@ class ResultCard extends StatelessWidget {
                 _buildRow('Patti (${pattiMode == 'rate' ? '$pattiValue%' : 'Fixed'})', '${NumberUtils.formatWeight(result.pattiWeight)} QTL'),
                 _buildRow('Net Weight', '${NumberUtils.formatWeight(result.netWeight)} QTL', isHighlighted: true),
                 const Divider(),
-                _buildRow('Danda ($dandaRate%)', '${NumberUtils.formatWeight(result.dandaWeight)} QTL'),
+                _buildRow('Danda ($dandaRate Kg/QTL)', '${NumberUtils.formatWeight(result.dandaWeight)} QTL'),
                 _buildRow('Net Weight with Danda', '${NumberUtils.formatWeight(result.netWeightDanda)} QTL', isHighlighted: true),
                 const Divider(),
                 _buildRow('Rate', '${NumberUtils.formatCurrency(rate)}/QTL'),

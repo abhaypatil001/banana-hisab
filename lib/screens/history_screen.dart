@@ -174,7 +174,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 _buildDetailRow('Patti (${transaction.pattiMode == 'rate' ? '${transaction.pattiRate}%' : 'Fixed'})', '${NumberUtils.formatWeight(transaction.pattiWeight)} QTL'),
                 _buildDetailRow('Net Weight', '${NumberUtils.formatWeight(transaction.netWeight)} QTL', isHighlighted: true),
                 const Divider(height: 24),
-                _buildDetailRow('Danda (${transaction.dandaRate}%)', '${NumberUtils.formatWeight(transaction.dandaWeight)} QTL'),
+                _buildDetailRow('Danda (${transaction.dandaRate} Kg/QTL)', '${NumberUtils.formatWeight(transaction.dandaWeight)} QTL'),
                 _buildDetailRow('Net Weight with Danda', '${NumberUtils.formatWeight(transaction.netWeightDanda)} QTL', isHighlighted: true),
                 const Divider(height: 24),
                 _buildDetailRow('Rate', '${NumberUtils.formatCurrency(transaction.rate)}/QTL'),

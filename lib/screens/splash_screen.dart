@@ -39,69 +39,116 @@ class _SplashScreenState extends State<SplashScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.amber[100]!, Colors.yellow[50]!],
+            colors: [Color(0xFFFFFAF0), Color(0xFFFEF3C7)],
           ),
         ),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Logo placeholder
-              Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                  color: Colors.green[700],
-                  borderRadius: BorderRadius.circular(30),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 20,
-                      offset: const Offset(0, 10),
-                    ),
-                  ],
-                ),
-                child: const Icon(
-                  Icons.calculate,
-                  size: 60,
-                  color: Colors.white,
-                ),
+              // Splash Logo
+              Image.asset(
+                'assets/splash.png',
+                width: MediaQuery.of(context).size.width * 0.82,
+                fit: BoxFit.contain,
               ),
-              const SizedBox(height: 24),
-              Text(
-                AppConstants.appName,
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.green[800],
-                ),
+              const SizedBox(height: 6),
+              
+              // Powered by section
+              Column(
+                children: [
+                  Text(
+                    'Powered by',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    AppConstants.developerName,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFF064E3B),
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Container(
+                    width: 60,
+                    height: 2,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.transparent, Color(0xFF16A34A), Colors.transparent],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30),
+              
+              // Contact info
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.phone, size: 18, color: Color(0xFF16A34A)),
+                      const SizedBox(width: 10),
+                      Text(
+                        AppConstants.developerPhone,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF064E3B),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.email, size: 18, color: Color(0xFF16A34A)),
+                      const SizedBox(width: 10),
+                      Text(
+                        AppConstants.developerEmail,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF064E3B),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
               const SizedBox(height: 40),
-              const CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-              ),
-              const SizedBox(height: 60),
-              Text(
-                'Powered by ${AppConstants.developerName}',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[700],
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                AppConstants.developerPhone,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey[600],
-                ),
-              ),
-              Text(
-                AppConstants.developerEmail,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey[600],
-                ),
+              
+              // Loading spinner
+              Column(
+                children: [
+                  SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 4,
+                      valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF16A34A)),
+                      backgroundColor: Color(0xFF16A34A).withOpacity(0.2),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Loading...',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF064E3B),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

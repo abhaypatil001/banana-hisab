@@ -41,7 +41,7 @@ class CalculationService {
     // Calculate net weight
     double netWeight = grossWeight - pattiWeight;
 
-    // Calculate danda weight
+    // Calculate danda weight (Kg per QTL formula)
     double dandaWeight = (netWeight / 100) * dandaRate;
 
     // Calculate net weight with danda

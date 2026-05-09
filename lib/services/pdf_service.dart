@@ -91,7 +91,7 @@ class PdfService {
                     ['Gross Weight', '${NumberUtils.formatWeight(transaction.grossWeight)} QTL'],
                     ['Patti (${transaction.pattiMode == 'rate' ? '${transaction.pattiRate}%' : 'Fixed'})', '${NumberUtils.formatWeight(transaction.pattiWeight)} QTL'],
                     ['Net Weight', '${NumberUtils.formatWeight(transaction.netWeight)} QTL'],
-                    ['Danda (${transaction.dandaRate}%)', '${NumberUtils.formatWeight(transaction.dandaWeight)} QTL'],
+                    ['Danda (${transaction.dandaRate} Kg/QTL)', '${NumberUtils.formatWeight(transaction.dandaWeight)} QTL'],
                     ['Net Weight with Danda', '${NumberUtils.formatWeight(transaction.netWeightDanda)} QTL'],
                     ['Rate', '${NumberUtils.formatCurrency(transaction.rate)}/QTL'],
                     ['Amount', NumberUtils.formatCurrency(transaction.amount)],
@@ -182,7 +182,7 @@ Gross Weight: ${NumberUtils.formatWeight(transaction.grossWeight)} QTL
 Patti (${transaction.pattiMode == 'rate' ? '${transaction.pattiRate}%' : 'Fixed'}): ${NumberUtils.formatWeight(transaction.pattiWeight)} QTL
 Net Weight: ${NumberUtils.formatWeight(transaction.netWeight)} QTL
 
-Danda (${transaction.dandaRate}%): ${NumberUtils.formatWeight(transaction.dandaWeight)} QTL
+Danda (${transaction.dandaRate} Kg/QTL): ${NumberUtils.formatWeight(transaction.dandaWeight)} QTL
 Net Weight with Danda: ${NumberUtils.formatWeight(transaction.netWeightDanda)} QTL
 
 Rate: ${NumberUtils.formatCurrency(transaction.rate)}/QTL

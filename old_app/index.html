@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: 'unsafe-inline' 'unsafe-eval';">
+<title>Banana Hisab – Simple. Accurate. Reliable.</title>
+
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --g1:#16A34A;--g2:#15803D;--g3:#166534;
+  --lime:#84CC16;--yellow:#FBBF24;--amber:#F59E0B;
+  --dark:#1F2937;--muted:#6B7280;--light:#F9FAFB;
+  --border:#E5E7EB;--card:#FFFFFF;
+  --red:#EF4444;--blue:#3B82F6;
+  --radius:16px;--shadow:0 4px 24px rgba(0,0,0,0.06);
+}
+html,body{height:100%;overflow:hidden;background:#F3F4F6;font-family:'Segoe UI','Roboto',Arial,sans-serif;color:var(--dark)}
+#app{display:flex;flex-direction:column;height:100%;max-width:480px;margin:0 auto;position:relative;background:#F3F4F6}
+.screen{display:none;flex:1;flex-direction:column;overflow:hidden;animation:fadeIn 0.22s ease}
+.screen.active{display:flex}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px 6px}
+
+/* TOP BAR */
+.topbar{background:linear-gradient(135deg,var(--g1),var(--g3));padding:13px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.topbar-logo{display:flex;align-items:center;gap:9px}
+.topbar-logo .brand .b1{font-size:17px;font-weight:900;color:#fff}
+.topbar-logo .brand .b2{font-size:17px;font-weight:900;color:var(--yellow)}
+.topbar-actions{display:flex;gap:7px}
+.icon-btn{width:35px;height:35px;border-radius:9px;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.25);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.2s}
+.icon-btn:hover{background:rgba(255,255,255,0.28)}
+.icon-btn svg{width:16px;height:16px}
+
+/* INNER BAR */
+.inner-bar{background:var(--g1);padding:13px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.back-btn{width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,0.18);border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.inner-bar h2{font-size:16px;font-weight:800;color:#fff;flex:1}
+.inner-bar .right-actions{display:flex;gap:7px}
+
+/* BOTTOM NAV */
+.bottom-nav{background:#fff;border-top:1px solid var(--border);display:flex;flex-shrink:0}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:9px 4px 7px;cursor:pointer;position:relative;transition:all 0.2s}
+.nav-item svg{width:21px;height:21px;stroke:var(--muted);transition:stroke 0.2s}
+.nav-item .nl{font-size:10px;font-weight:700;color:var(--muted);margin-top:2px;transition:color 0.2s}
+.nav-item.active svg{stroke:var(--g1)}
+.nav-item.active .nl{color:var(--g1)}
+.nav-item.active::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:28px;height:3px;background:var(--g1);border-radius:0 0 4px 4px}
+.badge{position:absolute;top:5px;right:calc(50% - 17px);background:var(--red);color:#fff;font-size:9px;font-weight:800;min-width:15px;height:15px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 3px}
+
+/* CARDS */
+.card{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:11px;box-shadow:var(--shadow)}
+.card-head{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:13px}
+
+/* INPUTS */
+.inp-group{margin-bottom:12px}
+.inp-group:last-child{margin-bottom:0}
+.inp-group label{display:block;font-size:11px;font-weight:800;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.4px}
+.inp-group input,.inp-group select{width:100%;padding:12px 13px;border:2px solid var(--border);border-radius:10px;font-family:'Segoe UI','Roboto',Arial,sans-serif;font-size:16px;font-weight:700;color:var(--dark);background:#FAFAFA;transition:all 0.18s;-webkit-appearance:none}
+.inp-group input:focus,.inp-group select:focus{outline:none;border-color:var(--g1);background:#fff;box-shadow:0 0 0 3px rgba(22,163,74,0.1)}
+.inp-group input::placeholder{color:#D1D5DB;font-weight:500}
+
+/* SEGMENT */
+.seg-ctrl{display:flex;background:#F0FDF4;border:2px solid var(--g1);border-radius:9px;padding:3px;gap:3px}
+.seg-btn{flex:1;padding:8px 4px;border:none;border-radius:6px;font-family:'Segoe UI','Roboto',Arial,sans-serif;font-size:12px;font-weight:800;cursor:pointer;background:transparent;color:var(--g2);transition:all 0.18s}
+.seg-btn.active{background:var(--g1);color:#fff;box-shadow:0 2px 8px rgba(22,163,74,0.25)}
+
+/* RESULTS */
+.res-row{display:flex;justify-content:space-between;align-items:center;padding:9px 12px;border-radius:8px;margin-bottom:6px;background:#F8FAFC;border-left:3px solid #E2E8F0}
+.res-row .rl{font-size:12px;font-weight:600;color:var(--muted)}
+.res-row .rv{font-size:13px;font-weight:800;color:var(--dark)}
+.res-row.hi{border-left-color:var(--g1);background:#F0FDF4}
+.res-row.hi .rl{color:var(--g2)}
+.res-row.hi .rv{color:var(--g1)}
+.divider{height:1px;background:var(--border);margin:9px 0}
+.total-band{display:flex;justify-content:space-between;align-items:flex-end;padding:14px 15px;border-radius:12px;background:linear-gradient(135deg,var(--g1),var(--g3));margin-top:3px}
+.total-band .tl{font-size:13px;font-weight:700;color:rgba(255,255,255,0.85)}
+.total-band .tv{font-size:21px;font-weight:900;color:#fff;text-align:right}
+.total-band .tw{font-size:10px;color:rgba(255,255,255,0.65);font-weight:600;margin-top:2px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:13px 16px;border:none;border-radius:11px;font-family:'Segoe UI','Roboto',Arial,sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:all 0.18s}
+.btn svg{width:16px;height:16px;flex-shrink:0}
+.btn-primary{background:linear-gradient(135deg,var(--g1),var(--g3));color:#fff;box-shadow:0 5px 18px rgba(22,163,74,0.3)}
+.btn-primary:active{transform:translateY(2px);box-shadow:0 2px 8px rgba(22,163,74,0.25)}
+.btn-secondary{background:#F0FDF4;color:var(--g1);border:2px solid #BBF7D0}
+.btn-outline{background:#fff;color:var(--muted);border:2px solid var(--border)}
+.btn-danger{background:#FEF2F2;color:var(--red);border:2px solid #FECACA}
+.action-row{display:flex;gap:6px;padding:10px 14px;background:#fff;border-top:1px solid var(--border);flex-shrink:0}
+.action-row .btn{flex:1;padding:12px 6px;font-size:13px}
+
+/* HISTORY */
+.hist-item{background:#fff;border-radius:12px;padding:13px 14px;margin-bottom:9px;display:flex;align-items:center;gap:11px;box-shadow:0 2px 10px rgba(0,0,0,0.05);cursor:pointer;transition:transform 0.15s}
+.hist-item:active{transform:scale(0.98)}
+.hist-avatar{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,var(--g1),var(--lime));display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:#fff;flex-shrink:0;border:none;box-shadow:none;}
+.hist-info{flex:1;min-width:0}
+.hist-info .hname{font-size:14px;font-weight:800;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hist-info .hmeta{font-size:11px;color:var(--muted);margin-top:2px;font-weight:600}
+.hist-right{text-align:right;flex-shrink:0}
+.hist-right .hamount{font-size:14px;font-weight:900;color:var(--g1)}
+.hist-right .hwt{font-size:11px;color:var(--muted);font-weight:600}
+
+/* PARTY */
+.party-item{background:#fff;border-radius:12px;padding:13px 14px;margin-bottom:9px;display:flex;align-items:center;gap:11px;box-shadow:0 2px 10px rgba(0,0,0,0.05);cursor:pointer;transition:transform 0.15s}
+.party-item:active{transform:scale(0.98)}
+.p-avatar{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:#ffffff;flex-shrink:0;border:none;box-shadow:none;text-shadow:none;outline:none;}
+.p-info .pname{font-size:14px;font-weight:800;color:var(--dark)}
+.p-info .pmeta{font-size:11px;color:var(--muted);margin-top:2px;font-weight:600}
+.p-right{margin-left:auto;text-align:right;flex-shrink:0}
+.p-right .ptotal{font-size:14px;font-weight:900;color:var(--g1)}
+
+/* SEARCH */
+.search-wrap{padding:10px 14px;background:#fff;border-bottom:1px solid var(--border);flex-shrink:0}
+.search-box{display:flex;align-items:center;gap:7px;background:#F3F4F6;border-radius:9px;padding:9px 12px}
+.search-box svg{width:15px;height:15px;stroke:var(--muted);flex-shrink:0}
+.search-box input{border:none;background:transparent;font-family:'Segoe UI','Roboto',Arial,sans-serif;font-size:14px;font-weight:600;color:var(--dark);flex:1;outline:none}
+
+/* FILTER */
+.filter-row{display:flex;gap:6px;padding:9px 14px;overflow-x:auto;flex-shrink:0;scrollbar-width:none}
+.filter-row::-webkit-scrollbar{display:none}
+.pill{padding:5px 13px;border-radius:100px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;border:2px solid var(--border);background:#fff;color:var(--muted);transition:all 0.15s;flex-shrink:0}
+.pill.active{background:var(--g1);border-color:var(--g1);color:#fff}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:11px}
+.stat-box{background:#fff;border-radius:11px;padding:12px 8px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
+.stat-box .sv{font-size:16px;font-weight:900;color:var(--g1)}
+.stat-box .sl{font-size:9px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-top:2px}
+
+/* SETTINGS */
+.s-group{margin-bottom:16px}
+.s-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:9px;padding-bottom:6px;border-bottom:2px solid var(--border)}
+.s-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;gap:10px;border-bottom:1px solid #F3F4F6}
+.s-row:last-child{border-bottom:none}
+.s-row label{font-size:13px;font-weight:700;color:var(--dark);flex:1;line-height:1.3}
+.s-row .hint{font-size:11px;color:var(--muted);font-weight:500;display:block;margin-top:1px}
+.s-row input[type=number]{width:95px;padding:8px 10px;border:2px solid var(--border);border-radius:9px;font-family:'Segoe UI','Roboto',Arial,sans-serif;font-size:14px;font-weight:800;color:var(--dark);text-align:right;background:#FAFAFA;transition:border-color 0.18s}
+.s-row input[type=number]:focus{outline:none;border-color:var(--g1);background:#fff}
+
+/* OVERLAY/SHEET */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.48);z-index:200;backdrop-filter:blur(4px);align-items:flex-end;justify-content:center}
+.overlay.open{display:flex;animation:fadeIn 0.18s ease}
+@media(min-width:420px){.overlay.open{align-items:center}}
+.sheet{background:#fff;border-radius:22px 22px 0 0;padding:22px 18px 26px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;animation:slideUp 0.26s ease}
+@media(min-width:420px){.sheet{border-radius:22px}}
+@keyframes slideUp{from{transform:translateY(36px);opacity:0}to{transform:translateY(0);opacity:1}}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.sheet-head h3{font-size:17px;font-weight:900;color:var(--dark)}
+.x-btn{width:28px;height:28px;border-radius:50%;background:var(--border);border:none;cursor:pointer;font-size:14px;color:var(--muted);display:flex;align-items:center;justify-content:center}
+
+/* PROFIT */
+.mode-switch{display:flex;background:#F0FDF4;border:2px solid var(--g1);border-radius:10px;padding:3px;gap:3px;margin-bottom:14px}
+.mode-btn{flex:1;padding:9px;border:none;border-radius:7px;font-family:'Segoe UI','Roboto',Arial,sans-serif;font-size:13px;font-weight:800;cursor:pointer;background:transparent;color:var(--g2);transition:all 0.18s}
+.mode-btn.active{background:var(--g1);color:#fff;box-shadow:0 2px 8px rgba(22,163,74,0.25)}
+.profit-box{padding:16px;border-radius:12px;text-align:center;margin-top:10px}
+.profit-box.pos{background:linear-gradient(135deg,#F0FDF4,#DCFCE7)}
+.profit-box.neg{background:linear-gradient(135deg,#FEF2F2,#FEE2E2)}
+.profit-box .pv{font-size:26px;font-weight:900;color:var(--g1)}
+.profit-box.neg .pv{color:var(--red)}
+.profit-box .pp{font-size:15px;font-weight:700;color:var(--g2);margin-top:3px}
+.profit-box.neg .pp{color:var(--red)}
+.profit-box .pl{font-size:11px;color:var(--muted);font-weight:700;margin-top:3px}
+
+/* DETAIL */
+.detail-band{background:linear-gradient(135deg,var(--g1),var(--g3));padding:18px 16px;flex-shrink:0}
+.detail-band .dp{font-size:19px;font-weight:900;color:#fff}
+.detail-band .dm{font-size:11px;color:rgba(255,255,255,0.7);margin-top:2px;font-weight:600}
+.detail-band .dt{font-size:26px;font-weight:900;color:#fff;margin-top:7px}
+
+/* EMPTY */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:44px 22px;text-align:center;gap:10px}
+.empty svg{width:48px;height:48px;stroke:#D1D5DB;stroke-width:1.5}
+.empty p{font-size:13px;font-weight:600;color:#9CA3AF;line-height:1.6}
+
+/* TOAST */
+.toast{position:fixed;bottom:74px;left:50%;transform:translateX(-50%) translateY(70px);background:#1F2937;color:#fff;padding:10px 20px;border-radius:100px;font-size:13px;font-weight:700;z-index:300;transition:transform 0.28s ease;white-space:nowrap;pointer-events:none;max-width:calc(100vw - 40px);text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.scroll-pad{height:14px}
+
+/* ===== NEW SPLASH SCREEN CSS ===== */
+#splash { display: flex; flex-direction: column; align-items: center; justify-content: center;
+  position: fixed; inset: 0; background: linear-gradient(135deg, #FFFAF0 0%, #FEF3C7 100%);
+  z-index: 1000; -webkit-transition: opacity 0.5s ease; transition: opacity 0.5s ease; color: #064E3B; font-family:'Segoe UI','Roboto',Arial,sans-serif;
+  text-align: center; padding: 24px;
+}
+.s-logo-img { width: 280px; max-width: 82%; height: auto; object-fit: contain; display: block; margin: 0 auto 6px auto; 
+  -webkit-animation: logoFadeIn 0.8s ease-out both; animation: logoFadeIn 0.8s ease-out both; }
+.s-powered-box { text-align: center; margin-bottom: 30px; -webkit-animation: fadeInUp 0.8s ease-out 0.3s both; animation: fadeInUp 0.8s ease-out 0.3s both; }
+.s-pow-text { font-size: 14px; font-weight: 600; color: #4B5563; }
+.s-pow-name { font-size: 20px; font-weight: 800; color: #064E3B; font-style: italic; margin-top: 4px; }
+.s-pow-divider { margin-top: 12px; display: flex; justify-content: center; }
+.s-contact { display: flex; flex-direction: column; gap: 12px; font-size: 14px; font-weight: 700; color: #064E3B; margin-bottom: 40px;
+  -webkit-animation: fadeInUp 0.8s ease-out 0.5s both; animation: fadeInUp 0.8s ease-out 0.5s both; }
+.s-contact div { display: flex; align-items: center; gap: 10px; justify-content: center; }
+.s-contact svg { width: 18px; height: 18px; stroke: #16A34A; stroke-width: 2.5; fill: none; }
+.s-loader { display: flex; flex-direction: column; align-items: center; gap: 12px; font-size: 14px; font-weight: 700; color: #064E3B;
+  -webkit-animation: fadeInUp 0.8s ease-out 0.7s both; animation: fadeInUp 0.8s ease-out 0.7s both; }
+.spinner { width: 30px; height: 30px; border: 4px solid rgba(22,163,74,0.2); border-top-color: #16A34A; border-radius: 50%; -webkit-animation: spin 1s linear infinite; animation: spin 1s linear infinite; }
+@-webkit-keyframes spin { 0% { -webkit-transform: rotate(0deg); transform: rotate(0deg); } 100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); } }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@-webkit-keyframes logoFadeIn { 0% { opacity: 0; -webkit-transform: scale(0.8) translateY(-20px); transform: scale(0.8) translateY(-20px); } 100% { opacity: 1; -webkit-transform: scale(1) translateY(0); transform: scale(1) translateY(0); } }
+@keyframes logoFadeIn { 0% { opacity: 0; transform: scale(0.8) translateY(-20px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+@-webkit-keyframes fadeInUp { 0% { opacity: 0; -webkit-transform: translateY(20px); transform: translateY(20px); } 100% { opacity: 1; -webkit-transform: translateY(0); transform: translateY(0); } }
+@keyframes fadeInUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+
+/* ══ LOGO WRAPPERS ══ */
+.splash-logo-img {
+  width: 280px;
+  max-width: 82%;
+  height: auto;
+  display: block;
+  margin: 0 auto 10px auto;
+  text-align: center;
+}
+.splash-logo-img img {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: transparent;
+}
+.app-icon-sm {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+}
+.app-icon-sm img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  display: block;
+  background: transparent;
+}
+.app-icon-lg {
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+}
+.app-icon-lg img {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  display: block;
+  background: transparent;
+}
+
+/* ══ PRINT STYLES ══ */
+@media print {
+  body > *:not(#printOverlay) { display: none !important; }
+  #printOverlay { display: block !important; position: static !important; padding: 0 !important; }
+  #printContent { padding: 0 !important; }
+  .no-print { display: none !important; }
+  #printContent { max-width: 100% !important; }
+}
+</style>
+</head>
+<body>
+
+<div id="splash">
+  <div class="splash-logo-img"><img loading="eager" decoding="sync" src="splash.png" alt="Banana Hisab Logo" onerror="this.style.display='none'"></div>
+    
+  
+  <div class="s-powered-box">
+     <div class="s-pow-text">Powered by</div>
+     <div class="s-pow-name">Ganesh Patil</div>
+     <div class="s-pow-divider">
+        <svg width="40" height="10" viewBox="0 0 40 10"><path d="M0,5 Q10,0 20,5 T40,5" fill="none" stroke="#16A34A" stroke-width="2"/></svg>
+     </div>
+  </div>
+
+  <div class="s-contact">
+     <div>
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> 
+        +91 9823809555
+     </div>
+     <div>
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> 
+        ganeshpatil5810@gmail.com
+     </div>
+  </div>
+
+  <div class="s-loader">
+     <div class="spinner"></div>
+     <div>Loading...</div>
+  </div>
+</div>
+
+<div id="app">
+
+<div class="screen active" id="screen-home">
+  <div class="topbar">
+    <div class="topbar-logo">
+      <div class="app-icon-sm"><img loading="eager" decoding="sync" src="logo.png" alt="Logo" onerror="this.style.display='none'"></div>
+      
+      <div class="brand"><span class="b1">Banana </span><span class="b2">Hisab</span></div>
+    </div>
+    <div class="topbar-actions">
+      <button class="icon-btn" onclick="openSettings()" title="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="scroll">
+    <div class="card">
+      <div class="card-head">Input Details</div>
+      <div class="inp-group">
+        <label>Gross Weight (QTL)</label>
+        <input type="number" id="netWeightPatti" step="0.01" placeholder="e.g. 16.00" inputmode="decimal">
+      </div>
+      <div class="inp-group">
+        <label>Rate (₹/QTL)</label>
+        <input type="number" id="rate" step="0.01" placeholder="e.g. 1000" inputmode="decimal">
+      </div>
+      <div class="inp-group" style="margin-bottom:0">
+        <label>Party Name <span style="text-transform:none;font-weight:500;color:#9CA3AF">(optional)</span></label>
+        <input type="text" id="partyNameInput" placeholder="e.g. Patil Traders" list="party-suggestions" autocomplete="off">
+        <datalist id="party-suggestions"></datalist>
+      </div>
+    </div>
+    <div class="card" style="background:linear-gradient(135deg,#F0FDF4,#DCFCE7)">
+      <div class="card-head" style="color:#166534">Flexible Deductions</div>
+      <div class="inp-group">
+        <label style="color:#166534">Patti Mode</label>
+        <div class="seg-ctrl" id="pattiToggle" data-mode="rate">
+          <button class="seg-btn active" id="tab_rate" onclick="setPattiMode('rate')">Rate /QTL</button>
+          <button class="seg-btn" id="tab_fixed" onclick="setPattiMode('fixed')">Fixed QTL Cut</button>
+        </div>
+      </div>
+      <div id="pattiRateGroup" class="inp-group">
+        <label style="color:#166534">Patti Rate (/QTL)</label>
+        <input type="number" id="pattiType" step="0.1" placeholder="7.5" inputmode="decimal">
+      </div>
+      <div id="pattiFixedGroup" class="inp-group" style="display:none">
+        <label style="color:#166534">Fixed QTL to Cut</label>
+        <input type="number" id="pattiFixed" step="0.01" placeholder="0.50" inputmode="decimal">
+      </div>
+      <div class="inp-group" style="margin-bottom:0">
+        <label style="color:#166534">Danda Rate</label>
+        <select id="dandaType"><option value="">Loading…</option></select>
+      </div>
+    </div>
+    <div id="results" style="display:none">
+      <div class="card">
+        <div class="card-head">Calculation Results</div>
+        <div class="res-row"><span class="rl">Gross Weight</span><span class="rv" id="dispNetWeightPatti">—</span></div>
+        <div class="res-row"><span class="rl">Patti</span><span class="rv" id="dispPattiRate">—</span></div>
+        <div class="res-row"><span class="rl">Patti Weight</span><span class="rv" id="pattiWeight">—</span></div>
+        <div class="res-row hi"><span class="rl">Net Weight</span><span class="rv" id="netWeight">—</span></div>
+        <div class="divider"></div>
+        <div class="res-row"><span class="rl">Danda Rate</span><span class="rv" id="dispDandaRate">—</span></div>
+        <div class="res-row"><span class="rl">Danda Weight</span><span class="rv" id="dandaWeight">—</span></div>
+        <div class="res-row hi"><span class="rl">Net Wt. with Danda</span><span class="rv" id="netWeightDanda">—</span></div>
+        <div class="divider"></div>
+        <div class="res-row"><span class="rl">Rate</span><span class="rv" id="dispRate">—</span></div>
+        <div class="res-row"><span class="rl">Amount</span><span class="rv" id="amount">—</span></div>
+        <div class="res-row"><span class="rl" id="lbl_commission">Commission</span><span class="rv" id="commission">—</span></div>
+        <div class="res-row"><span class="rl" id="lbl_majuri">Majuri</span><span class="rv" id="majuri">—</span></div>
+        <div class="total-band">
+          <div><div class="tl">Total Amount</div><div class="tw" id="amountWords"></div></div>
+          <div><div class="tv" id="totalAmount">—</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-pad"></div>
+  </div>
+  <div class="action-row">
+    <button class="btn btn-outline" onclick="resetCalc()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-5.5"/></svg>
+      Reset
+    </button>
+    <button class="btn btn-secondary" id="shareBtn" onclick="openShareSheet('home')" style="display:none; padding:12px 6px;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="15" height="15"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      Share
+    </button>
+    <button class="btn btn-primary" onclick="calculateAndSave()">
+      Save
+    </button>
+  </div>
+</div><div class="screen" id="screen-history">
+  <div class="inner-bar">
+    <button class="back-btn" onclick="openScreen('screen-home')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <h2>History</h2>
+    <div class="right-actions">
+      <button class="icon-btn" onclick="toggleSearch()" title="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+    </div>
+  </div>
+  <div class="search-wrap" id="hist-search-wrap" style="display:none">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="histSearch" placeholder="Search by party or rate…" oninput="renderHistory()">
+    </div>
+  </div>
+  <div class="filter-row">
+    <div class="pill active" onclick="setHistFilter(this,'all')">All</div>
+    <div class="pill" onclick="setHistFilter(this,'today')">Today</div>
+    <div class="pill" onclick="setHistFilter(this,'week')">This Week</div>
+    <div class="pill" onclick="setHistFilter(this,'month')">This Month</div>
+  </div>
+  <div class="scroll" id="hist-list">
+    <div class="empty"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor"/><polyline points="12 6 12 12 16 14" stroke="currentColor"/></svg><p>No transactions yet.<br>Calculate &amp; Save from Home.</p></div>
+  </div>
+</div>
+
+<div class="screen" id="screen-parties">
+  <div class="inner-bar">
+    <button class="back-btn" onclick="openScreen('screen-home')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <h2>Parties</h2>
+    <div class="right-actions">
+      <button class="icon-btn" onclick="openAddPartySheet()" title="Add Party"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="partySearch" placeholder="Search party…" oninput="renderParties()">
+    </div>
+  </div>
+  <div class="scroll" id="party-list"></div>
+</div>
+
+<div class="screen" id="screen-profit">
+  <div class="inner-bar">
+    <button class="back-btn" onclick="openScreen('screen-home')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <h2>Profit Calculator</h2>
+  </div>
+  <div class="scroll">
+    <div class="card">
+      <div class="mode-switch">
+        <button class="mode-btn active" id="pm-buy" onclick="setProfitMode('buy')">Buying Mode</button>
+        <button class="mode-btn" id="pm-sell" onclick="setProfitMode('sell')">Selling Mode</button>
+      </div>
+      <div class="inp-group">
+        <label>Net Weight (QTL)</label>
+        <input type="number" id="p_weight" step="0.01" placeholder="15.87" oninput="calcProfit()" inputmode="decimal">
+      </div>
+      <div class="inp-group">
+        <label id="p_blbl">Buying Rate (₹/QTL)</label>
+        <input type="number" id="p_buyRate" step="0.01" placeholder="950" oninput="calcProfit()" inputmode="decimal">
+      </div>
+      <div class="inp-group" style="margin-bottom:0">
+        <label id="p_slbl">Selling Rate (₹/QTL)</label>
+        <input type="number" id="p_sellRate" step="0.01" placeholder="1050" oninput="calcProfit()" inputmode="decimal">
+      </div>
+    </div>
+    <div class="card" id="profit-card" style="display:none">
+      <div class="card-head">Result</div>
+      <div class="res-row"><span class="rl">Total Buying Amount</span><span class="rv" id="p_buyAmt">—</span></div>
+      <div class="res-row"><span class="rl">Total Selling Amount</span><span class="rv" id="p_sellAmt">—</span></div>
+      <div class="divider"></div>
+      <div class="profit-box pos" id="profit-display">
+        <div class="pv" id="p_profitAmt">₹0</div>
+        <div class="pp" id="p_profitPct">0.00%</div>
+        <div class="pl" id="p_profitLbl">Profit</div>
+      </div>
+    </div>
+    <div class="scroll-pad"></div>
+  </div>
+</div>
+
+<div class="screen" id="screen-more">
+  <div class="inner-bar">
+    <button class="back-btn" onclick="openScreen('screen-home')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <h2>More</h2>
+  </div>
+  <div class="scroll">
+    <div class="card" style="background:linear-gradient(135deg,var(--g1),var(--g3));margin-bottom:11px">
+      <div style="display:flex;align-items:center;gap:14px">
+        
+        <div class="app-icon-lg"><img loading="eager" decoding="sync" src="logo.png" alt="Logo" onerror="this.style.display='none'"></div>
+        <div>
+          <div style="font-size:17px;font-weight:900;color:#fff">Banana <span style="color:var(--yellow)">Hisab</span></div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.75);font-weight:600">Simple. Accurate. Reliable.</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.5);margin-top:2px;font-weight:600">Version 2.0</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head" style="margin-bottom:10px">Quick Stats</div>
+      <div class="stats-row" id="more-stats"></div>
+    </div>
+    <div class="card">
+      <div class="card-head" style="margin-bottom:10px">Tools</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button class="btn btn-secondary" style="justify-content:flex-start" onclick="openSettings()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Settings
+        </button>
+        <button class="btn btn-danger" style="justify-content:flex-start" onclick="confirmClearAll()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+          Clear All Data
+        </button>
+      </div>
+    </div>
+    <div class="card" style="text-align:center;padding:18px">
+      <div style="font-size:11px;color:var(--muted);font-weight:700">Powered by</div>
+      <div style="font-size:16px;font-weight:900;color:var(--dark);margin-top:3px">Ganesh Patil</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px">ganeshpatil5810@gmail.com</div>
+    </div>
+    <div class="scroll-pad"></div>
+  </div>
+</div>
+
+<nav class="bottom-nav">
+  <div class="nav-item active" id="nav-home" onclick="openScreen('screen-home')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span class="nl">Home</span>
+  </div>
+  <div class="nav-item" id="nav-history" onclick="openScreen('screen-history')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <span class="nl">History</span>
+    <span class="badge" id="hist-badge" style="display:none">0</span>
+  </div>
+  <div class="nav-item" id="nav-parties" onclick="openScreen('screen-parties')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    <span class="nl">Parties</span>
+  </div>
+  <div class="nav-item" id="nav-profit" onclick="openScreen('screen-profit')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+    <span class="nl">Profit</span>
+  </div>
+  <div class="nav-item" id="nav-more" onclick="openScreen('screen-more')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+    <span class="nl">More</span>
+  </div>
+</nav>
+
+</div><div class="overlay" id="settingsOverlay" onclick="oc(event,'settingsOverlay')">
+  <div class="sheet">
+    <div class="sheet-head"><h3>⚙️ Settings</h3><button class="x-btn" onclick="closeSheet('settingsOverlay')">✕</button></div>
+    <div class="s-group">
+      
+      <div class="s-row"><label>Default Patti Rate<span class="hint">Per QTL deducted from gross weight</span></label><input type="number" id="s_pattiDefault" step="0.1" min="0"></div>
+    </div>
+    <div class="s-group">
+      
+      <div class="s-row"><label>Standard Danda Rate<span class="hint">Kg added per QTL (option 1)</span></label><input type="number" id="s_dandaStd" step="0.1" min="0"></div>
+      <div class="s-row"><label>High Danda Rate<span class="hint">Kg added per QTL (option 2)</span></label><input type="number" id="s_dandaHigh" step="0.1" min="0"></div>
+    </div>
+    <div class="s-group">
+      
+      <div class="s-row"><label>Commission<span class="hint">₹ per QTL</span></label><input type="number" id="s_commission" step="0.5" min="0"></div>
+      <div class="s-row"><label>Majuri<span class="hint">₹ per QTL</span></label><input type="number" id="s_majuri" step="0.5" min="0"></div>
+    </div>
+    <div style="display:flex;gap:9px;margin-top:14px">
+      <button class="btn btn-outline" style="flex:1" onclick="resetSettings()">Reset</button>
+      <button class="btn btn-primary" style="flex:2" onclick="saveSettings()">Save Settings</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="txnOverlay" onclick="oc(event,'txnOverlay')">
+  <div class="sheet" style="padding:0;overflow:hidden;border-radius:22px 22px 0 0">
+    <div class="detail-band">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div><div class="dp" id="txn-party">—</div><div class="dm" id="txn-date">—</div></div>
+        <span style="background:rgba(255,255,255,0.2);color:#fff;padding:3px 10px;border-radius:100px;font-size:11px;font-weight:700">Saved</span>
+      </div>
+      <div class="dt" id="txn-total">₹0</div>
+    </div>
+    <div style="padding:15px 16px 4px;overflow-y:auto;max-height:52vh" id="txn-rows"></div>
+    <div style="padding:10px 16px 18px;display:flex;gap:6px">
+      <button class="btn btn-outline" style="flex:1;padding:11px 4px;font-size:13px" onclick="openShareSheet('txn')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Share
+      </button>
+      <button class="btn btn-danger" style="flex:1;padding:11px 4px;font-size:13px" onclick="deleteTxn()">
+        Delete
+      </button>
+      <button class="btn btn-primary" style="flex:1;padding:11px 4px;font-size:13px" onclick="loadTxnToCalc()">
+        Edit
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="addPartyOverlay" onclick="oc(event,'addPartyOverlay')">
+  <div class="sheet">
+    <div class="sheet-head"><h3>➕ Add Party</h3><button class="x-btn" onclick="closeSheet('addPartyOverlay')">✕</button></div>
+    <div class="inp-group"><label>Party Name</label><input type="text" id="newPartyName" placeholder="e.g. Patil Traders"></div>
+    <div class="inp-group"><label>Phone <span style="text-transform:none;font-weight:400;color:#9CA3AF">(optional)</span></label><input type="tel" id="newPartyPhone" placeholder="+91 99999 99999"></div>
+    <div style="display:flex;gap:9px;margin-top:8px">
+      <button class="btn btn-outline" style="flex:1" onclick="closeSheet('addPartyOverlay')">Cancel</button>
+      <button class="btn btn-primary" style="flex:2" onclick="saveParty()">Save Party</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+
+
+// ─── DATA ───
+const DEFAULTS={pattiDefault:7.5,dandaStd:6.0,dandaHigh:7.0,commission:10,majuri:30};
+const KEYS={settings:'bh_settings',txns:'bh_txns',parties:'bh_parties'};
+const COLORS=['#16A34A','#2563EB','#DC2626','#D97706','#7C3AED','#0891B2','#059669','#DB2777','#EA580C'];
+
+// ─── Robust storage: works for local file:// and hosted ───
+const _store = (() => {
+  let mem = {};           // in-memory fallback
+  let useLS = false;
+  try {
+    const t = '__bh_test__';
+    localStorage.setItem(t,'1');
+    if(localStorage.getItem(t)==='1'){ localStorage.removeItem(t); useLS=true; }
+  } catch(e){}
+  return {
+    get(k){ try{ if(useLS){ const v=localStorage.getItem(k); return v!==null?JSON.parse(v):null; } return k in mem?mem[k]:null; }catch(e){return null;} },
+    set(k,v){ try{ if(useLS){ localStorage.setItem(k,JSON.stringify(v)); } else { mem[k]=v; } }catch(e){mem[k]=v;} },
+    del(k){ try{ if(useLS) localStorage.removeItem(k); else delete mem[k]; }catch(e){delete mem[k];} }
+  };
+})();
+
+function ld(k,fb){ const v=_store.get(k); return v!==null?v:fb; }
+function sv(k,v){ _store.set(k,v); }
+
+// Settings: always merge saved values over defaults so partial saves still work
+function loadSettings(){
+  const saved = ld(KEYS.settings, null);
+  if(!saved) return {...DEFAULTS};
+  return {
+    pattiDefault: saved.pattiDefault ?? DEFAULTS.pattiDefault,
+    dandaStd:     saved.dandaStd     ?? DEFAULTS.dandaStd,
+    dandaHigh:    saved.dandaHigh    ?? DEFAULTS.dandaHigh,
+    commission:   saved.commission   ?? DEFAULTS.commission,
+    majuri:       saved.majuri       ?? DEFAULTS.majuri,
+  };
+}
+function loadTxns(){return ld(KEYS.txns,[]);}
+function saveTxns(a){sv(KEYS.txns,a);}
+function loadParties(){return ld(KEYS.parties,[]);}
+function saveParties(a){sv(KEYS.parties,a);}
+let currentTxnId=null, histFilter='all';
+
+// ─── SPLASH ───
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var sp = document.getElementById('splash');
+    sp.style.opacity = '0';
+    sp.style.pointerEvents = 'none';
+    setTimeout(function() { sp.style.display = 'none'; }, 600);
+  }, 2500);
+});
+
+// ─── SCREENS ───
+const SKEYS=['home','history','parties','profit','more'];
+function openScreen(id){
+  SKEYS.forEach(s=>{
+    document.getElementById('screen-'+s).classList.remove('active');
+    const n=document.getElementById('nav-'+s);if(n)n.classList.remove('active');
+  });
+  document.getElementById(id).classList.add('active');
+  const k=id.replace('screen-','');
+  const n=document.getElementById('nav-'+k);if(n)n.classList.add('active');
+  if(id==='screen-history')renderHistory();
+  if(id==='screen-parties')renderParties();
+  if(id==='screen-more')renderMoreStats();
+}
+
+// ─── SETTINGS ───
+function openSettings(){
+  const c=loadSettings();
+  ['pattiDefault','dandaStd','dandaHigh','commission','majuri'].forEach(k=>sEl('s_'+k).value=c[k]);
+  openSheet('settingsOverlay');
+}
+function closeSettings(){closeSheet('settingsOverlay');}
+function saveSettings(){
+  function rv(id,def){const v=parseFloat(sEl(id).value);return isNaN(v)?def:v;}
+  const c={
+    pattiDefault: rv('s_pattiDefault', DEFAULTS.pattiDefault),
+    dandaStd:     rv('s_dandaStd',     DEFAULTS.dandaStd),
+    dandaHigh:    rv('s_dandaHigh',    DEFAULTS.dandaHigh),
+    commission:   rv('s_commission',   DEFAULTS.commission),
+    majuri:       rv('s_majuri',       DEFAULTS.majuri)
+  };
+  sv(KEYS.settings, c);
+  applySettings(c);
+  closeSettings();
+  toast('Settings saved ✓');
+}
+function resetSettings(){sv(KEYS.settings,{...DEFAULTS});['pattiDefault','dandaStd','dandaHigh','commission','majuri'].forEach(k=>sEl('s_'+k).value=DEFAULTS[k]);applySettings({...DEFAULTS});toast('Reset to defaults');}
+function applySettings(c){
+  sEl('pattiType').placeholder=c.pattiDefault.toString();
+  const ds=sEl('dandaType'),cv=ds.value;
+  ds.innerHTML=`<option value="${c.dandaStd}">Standard (${c.dandaStd} Kg/QTL)</option><option value="${c.dandaHigh}">High (${c.dandaHigh} Kg/QTL)</option>`;
+  if(cv===String(c.dandaStd)||cv===String(c.dandaHigh))ds.value=cv;
+  sEl('lbl_commission').textContent=`Commission (₹${c.commission}/QTL)`;
+  sEl('lbl_majuri').textContent=`Majuri (₹${c.majuri}/QTL)`;
+  if(sEl('results').style.display!=='none')calculate();
+}
+
+// ─── PATTI MODE ───
+function setPattiMode(m){
+  sEl('pattiToggle').dataset.mode=m;
+  sEl('tab_rate').classList.toggle('active',m==='rate');
+  sEl('tab_fixed').classList.toggle('active',m==='fixed');
+  sEl('pattiRateGroup').style.display=m==='rate'?'':'none';
+  sEl('pattiFixedGroup').style.display=m==='fixed'?'':'none';
+  if(sEl('results').style.display!=='none')calculate();
+}
+
+// ─── CALCULATE ───
+function calculate(){
+  const c=loadSettings();
+  const gw=nv('netWeightPatti'),rate=nv('rate'),dr=nv('dandaType')||0;
+  const pm=sEl('pattiToggle').dataset.mode||'rate';
+  let pw,pd;
+  if(pm==='fixed'){pw=nv('pattiFixed');pd=pw.toFixed(2)+' QTL (fixed)';}
+  else{const pr=nv('pattiType')||c.pattiDefault;pw=(gw/100)*pr;pd=pr.toFixed(2)+' /QTL';}
+  const nw=gw-pw, dw=(nw/100)*dr, nwd=nw+dw;
+  const rnd=Math.round(nwd*100)/100;
+  const amt=rnd*rate, com=rnd*c.commission, maj=rnd*c.majuri, total=Math.round(amt+com+maj);
+  set('dispNetWeightPatti',gw.toFixed(2)+' QTL');
+  set('dispPattiRate',pd);set('pattiWeight',pw.toFixed(2)+' QTL');set('netWeight',nw.toFixed(2)+' QTL');
+  set('dispDandaRate',dr.toFixed(2)+' Kg/QTL');set('dandaWeight',dw.toFixed(2)+' QTL');set('netWeightDanda',nwd.toFixed(2)+' QTL');
+  set('dispRate','₹'+rate.toFixed(2)+'/QTL');
+  set('amount','₹'+fmt(amt));set('commission','₹'+fmt(com));set('majuri','₹'+fmt(maj));
+  set('totalAmount','₹'+total.toLocaleString('en-IN'));
+  set('amountWords',toWords(total));
+  sEl('results').style.display='block';
+  sEl('shareBtn').style.display='inline-flex';
+  return{gw,rate,pm,pw,pd,nw,dr,dw,nwd,amt,com,maj,total,c};
+}
+
+function calculateAndSave(){
+  const gw=nv('netWeightPatti'),rate=nv('rate');
+  if(!gw||!rate){toast('⚠️ Enter Gross Weight & Rate');return;}
+  const r=calculate();if(!r)return;
+  const party=sEl('partyNameInput').value.trim()||'Unknown';
+  const t={id:Date.now().toString(),party,date:new Date().toISOString(),gw:r.gw,rate:r.rate,pm:r.pm,pw:r.pw,pd:r.pd,nw:r.nw,dr:r.dr,dw:r.dw,nwd:r.nwd,amt:r.amt,com:r.com,maj:r.maj,total:r.total};
+  const txns=loadTxns();txns.unshift(t);saveTxns(txns);
+  ensureParty(party);updateBadge();
+  toast('✅ Saved — '+party);
+}
+
+function ensureParty(name){
+  if(!name||name==='Unknown')return;
+  const p=loadParties();
+  if(!p.find(x=>x.name===name)){p.push({id:Date.now().toString(),name,phone:'',since:new Date().toISOString(),color:COLORS[p.length%COLORS.length]});saveParties(p);rebuildSuggestions();}
+}
+
+function resetCalc(){
+  ['netWeightPatti','rate','pattiType','pattiFixed','partyNameInput'].forEach(id=>{const e=sEl(id);if(e)e.value='';});
+  sEl('results').style.display='none';
+  sEl('shareBtn').style.display='none';
+  setPattiMode('rate');toast('Reset ✓');
+}
+
+// ─── HISTORY ───
+function toggleSearch(){
+  const w=sEl('hist-search-wrap');
+  const show=w.style.display==='none'||!w.style.display;
+  w.style.display=show?'block':'none';
+  if(show){const i=w.querySelector('input');if(i)i.focus();}
+}
+function setHistFilter(el,f){
+  document.querySelectorAll('.filter-row .pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');histFilter=f;renderHistory();
+}
+function renderHistory(){
+  const list=sEl('hist-list');
+  let txns=loadTxns();
+  const q=(sEl('histSearch')||{}).value||'';
+  const now=new Date();
+  if(histFilter==='today')txns=txns.filter(t=>sameDay(new Date(t.date),now));
+  else if(histFilter==='week')txns=txns.filter(t=>now-new Date(t.date)<7*864e5);
+  else if(histFilter==='month')txns=txns.filter(t=>{const d=new Date(t.date);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();});
+  if(q)txns=txns.filter(t=>t.party.toLowerCase().includes(q.toLowerCase())||String(t.rate).includes(q));
+  if(!txns.length){list.innerHTML='<div class="empty"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><polyline points="12 6 12 12 16 14" stroke="currentColor" stroke-width="1.5"/></svg><p>No transactions found.</p></div>';return;}
+  list.innerHTML=txns.map(t=>`<div class="hist-item" onclick="openTxn('${t.id}')">
+    <div class="hist-avatar">${t.party.charAt(0).toUpperCase()}</div>
+    <div class="hist-info"><div class="hname">${esc(t.party)}</div><div class="hmeta">${fmtDate(t.date)} · ₹${t.rate}/QTL</div></div>
+    <div class="hist-right"><div class="hamount">₹${t.total.toLocaleString('en-IN')}</div><div class="hwt">${t.nwd.toFixed(2)} QTL</div></div>
+  </div>`).join('');
+}
+
+function openTxn(id){
+  const t=loadTxns().find(x=>x.id===id);if(!t)return;
+  currentTxnId=id;
+  set('txn-party',t.party);set('txn-date',fmtDateLong(t.date));set('txn-total','₹'+t.total.toLocaleString('en-IN'));
+  const rows=[['Gross Weight',t.gw.toFixed(2)+' QTL'],['Rate','₹'+t.rate+'/QTL'],['Patti ('+t.pd+')',t.pw.toFixed(2)+' QTL'],['Net Weight',t.nw.toFixed(2)+' QTL'],['Danda Rate',t.dr.toFixed(2)+' Kg/QTL'],['Danda Weight',t.dw.toFixed(2)+' QTL'],['Net Wt. with Danda',t.nwd.toFixed(2)+' QTL'],'---',['Amount','₹'+fmt(t.amt)],['Commission','₹'+fmt(t.com)],['Majuri','₹'+fmt(t.maj)]];
+  sEl('txn-rows').innerHTML=rows.map(r=>r==='---'?'<div class="divider"></div>':`<div class="res-row"><span class="rl">${r[0]}</span><span class="rv">${r[1]}</span></div>`).join('');
+  openSheet('txnOverlay');
+}
+function deleteTxn(){
+  if(!confirm('Delete this transaction?'))return;
+  saveTxns(loadTxns().filter(t=>t.id!==currentTxnId));
+  closeSheet('txnOverlay');renderHistory();updateBadge();toast('Deleted');
+}
+function loadTxnToCalc(){
+  const t=loadTxns().find(x=>x.id===currentTxnId);if(!t)return;
+  sEl('netWeightPatti').value=t.gw;sEl('rate').value=t.rate;sEl('partyNameInput').value=t.party;
+  if(t.pm==='fixed'){setPattiMode('fixed');sEl('pattiFixed').value=t.pw;}
+  else{setPattiMode('rate');sEl('pattiType').value='';}
+  calculate();closeSheet('txnOverlay');openScreen('screen-home');toast('Loaded for editing');
+}
+function shareTxn(){const t=loadTxns().find(x=>x.id===currentTxnId);if(t)doShare(buildShare(t));}
+function shareResult(){
+  const gw=nv('netWeightPatti'),rate=nv('rate');if(!gw||!rate)return;
+  const t={party:sEl('partyNameInput').value.trim()||'—',date:new Date().toISOString(),gw,rate,pd:sEl('dispPattiRate').textContent,pw:nv('pattiWeight')||0,nw:nv('netWeight')||0,dr:nv('dispDandaRate')||0,dw:nv('dandaWeight')||0,nwd:nv('netWeightDanda')||0,amt:parseAmt('amount'),com:parseAmt('commission'),maj:parseAmt('majuri'),total:parseInt((sEl('totalAmount').textContent||'').replace(/[₹,]/g,''))||0};
+  doShare(buildShare(t));
+}
+
+// ─── SHARE SHEET ───
+let _shareCtx = 'home';
+function openShareSheet(ctx) { _shareCtx = ctx; openSheet('shareSheetOverlay'); }
+function doShareText() {
+  closeSheet('shareSheetOverlay');
+  if (_shareCtx === 'txn') { const t=loadTxns().find(x=>x.id===currentTxnId); if(t) doShare(buildShare(t)); }
+  else { shareResultText(); }
+}
+function doSharePDF() {
+  closeSheet('shareSheetOverlay');
+  setTimeout(() => { _shareCtx === 'txn' ? shareTxnPdf() : shareResultPdf(); }, 300);
+}
+function shareResultText() {
+  const gw=nv('netWeightPatti'),rate=nv('rate'); if(!gw||!rate) return;
+  function rq(id){return parseFloat((sEl(id).textContent||'').replace(/[^0-9.]/g,''))||0;}
+  const t={party:sEl('partyNameInput').value.trim()||'—',date:new Date().toISOString(),gw,rate,
+    pd:sEl('dispPattiRate').textContent.trim(),
+    pw:rq('pattiWeight'),nw:rq('netWeight'),dr:rq('dispDandaRate'),
+    dw:rq('dandaWeight'),nwd:rq('netWeightDanda'),
+    amt:parseAmt('amount'),com:parseAmt('commission'),maj:parseAmt('majuri'),
+    total:parseInt((sEl('totalAmount').textContent||'').replace(/[₹,]/g,''))||0};
+  doShare(buildShare(t));
+}
+// ─── PDF GENERATION ───
+var LOGO_SRC = "logo.png"; // local file bundled with APK
+function shareResultPdf() {
+  const gw=nv('netWeightPatti'), rate=nv('rate');
+  if(!gw||!rate) { toast('Calculate first!'); return; }
+  function rq(id){return parseFloat((sEl(id).textContent||'').replace(/[^0-9.]/g,''))||0;}
+  const t={
+    party: sEl('partyNameInput').value.trim()||'—',
+    date: new Date().toISOString(),
+    gw, rate,
+    pd: sEl('dispPattiRate').textContent.trim(),
+    pw: rq('pattiWeight'), nw: rq('netWeight'),
+    dr: rq('dispDandaRate'), dw: rq('dandaWeight'), nwd: rq('netWeightDanda'),
+    amt: parseAmt('amount'), com: parseAmt('commission'), maj: parseAmt('majuri'),
+    total: parseInt((sEl('totalAmount').textContent||'').replace(/[₹,]/g,''))||0
+  };
+  generatePDF(t);
+}
+function shareTxnPdf() {
+  const t = loadTxns().find(x => x.id === currentTxnId);
+  if (!t) { toast('No record found'); return; }
+  generatePDF(t);
+}
+function generatePDF(t) {
+  window._currentReceiptTxn = t; // store for share button
+  var n   = function(v){ return typeof v==='number' ? v : parseFloat(v)||0; };
+  var money = function(v){ return '₹'+n(v).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}); };
+  var qtl   = function(v){ return n(v).toFixed(2)+' QTL'; };
+  var party   = t.party || '—';
+  var dateStr = t.date ? fmtDateLong(t.date) : '—';
+
+  var inner =
+    '<div style="display:flex;align-items:center;gap:14px;padding-bottom:14px;border-bottom:3px solid #16A34A;margin-bottom:18px">'
+    + '<img src="logo.png" style="width:60px;height:60px;object-fit:contain" onerror="this.style.display=\'none\'">'
+    + '<div>'
+    + '<div style="font-size:22px;font-weight:900;color:#166534;font-family:Arial,sans-serif">Banana <span style="color:#F59E0B">Hisab</span></div>'
+    + '<div style="font-size:11px;color:#6B7280;font-weight:600;margin-top:2px;font-family:Arial,sans-serif">Simple. Accurate. Reliable.</div>'
+    + '</div></div>'
+
+    + '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">'
+    + '<div>'
+    + '<div style="font-size:17px;font-weight:900;color:#111827;font-family:Arial,sans-serif">'+party+'</div>'
+    + '<div style="font-size:11px;color:#9CA3AF;font-weight:500;margin-top:3px;font-family:Arial,sans-serif">'+dateStr+'</div>'
+    + '</div>'
+    + '<div style="background:#F0FDF4;color:#166534;border:1.5px solid #BBF7D0;padding:4px 14px;border-radius:100px;font-size:11px;font-weight:700;font-family:Arial,sans-serif">Receipt</div>'
+    + '</div>'
+
+    + '<table style="width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;border:1px solid #E5E7EB;margin-bottom:12px">'
+    + '<tr style="background:#fff"><td style="padding:9px 12px;font-size:12.5px;color:#6B7280;font-weight:600;font-family:Arial,sans-serif">Gross Weight</td><td style="padding:9px 12px;font-size:12.5px;font-weight:800;text-align:right;color:#111827;font-family:Arial,sans-serif">'+qtl(t.gw)+'</td></tr>'
+    + '<tr style="background:#fff"><td style="padding:9px 12px;font-size:12.5px;color:#6B7280;font-weight:600;font-family:Arial,sans-serif">Patti ('+(t.pd||'')+')</td><td style="padding:9px 12px;font-size:12.5px;font-weight:800;text-align:right;color:#EF4444;font-family:Arial,sans-serif">−'+qtl(t.pw)+'</td></tr>'
+    + '<tr style="background:#fff"><td style="padding:9px 12px;font-size:12.5px;color:#374151;font-weight:700;font-family:Arial,sans-serif">Net Weight</td><td style="padding:9px 12px;font-size:12.5px;font-weight:800;text-align:right;color:#111827;font-family:Arial,sans-serif">'+qtl(t.nw)+'</td></tr>'
+    + '<tr style="background:#fff;border-top:1.5px solid #E5E7EB"><td style="padding:9px 12px;font-size:12.5px;color:#6B7280;font-weight:600;font-family:Arial,sans-serif">Danda Rate</td><td style="padding:9px 12px;font-size:12.5px;font-weight:800;text-align:right;color:#111827;font-family:Arial,sans-serif">'+n(t.dr).toFixed(2)+' Kg/QTL</td></tr>'
+    + '<tr style="background:#fff"><td style="padding:9px 12px;font-size:12.5px;color:#6B7280;font-weight:600;font-family:Arial,sans-serif">Danda Weight</td><td style="padding:9px 12px;font-size:12.5px;font-weight:800;text-align:right;color:#16A34A;font-family:Arial,sans-serif">+'+qtl(t.dw)+'</td></tr>'
+    + '<tr style="background:#F0FDF4;border-top:1.5px solid #E5E7EB"><td style="padding:10px 12px;font-size:12.5px;color:#166534;font-weight:800;font-family:Arial,sans-serif">Net Wt. with Danda</td><td style="padding:10px 12px;font-size:12.5px;font-weight:900;text-align:right;color:#16A34A;font-family:Arial,sans-serif">'+qtl(t.nwd)+'</td></tr>'
+    + '<tr style="background:#fff;border-top:1.5px solid #E5E7EB"><td style="padding:9px 12px;font-size:12.5px;color:#6B7280;font-weight:600;font-family:Arial,sans-serif">Rate</td><td style="padding:9px 12px;font-size:12.5px;font-weight:800;text-align:right;color:#111827;font-family:Arial,sans-serif">₹'+n(t.rate).toFixed(2)+'/QTL</td></tr>'
+    + '<tr style="background:#fff"><td style="padding:9px 12px;font-size:12.5px;color:#6B7280;font-weight:600;font-family:Arial,sans-serif">Amount</td><td style="padding:9px 12px;font-size:12.5px;font-weight:800;text-align:right;color:#111827;font-family:Arial,sans-serif">'+money(t.amt)+'</td></tr>'
+    + '<tr style="background:#fff"><td style="padding:9px 12px;font-size:12.5px;color:#6B7280;font-weight:600;font-family:Arial,sans-serif">Commission</td><td style="padding:9px 12px;font-size:12.5px;font-weight:800;text-align:right;color:#111827;font-family:Arial,sans-serif">'+money(t.com)+'</td></tr>'
+    + '<tr style="background:#fff"><td style="padding:9px 12px;font-size:12.5px;color:#6B7280;font-weight:600;font-family:Arial,sans-serif">Majuri</td><td style="padding:9px 12px;font-size:12.5px;font-weight:800;text-align:right;color:#111827;font-family:Arial,sans-serif">'+money(t.maj)+'</td></tr>'
+    + '</table>'
+
+    + '<div style="background:linear-gradient(135deg,#166534 0%,#16A34A 100%);border-radius:12px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">'
+    + '<span style="font-size:13px;font-weight:700;color:rgba(255,255,255,0.85);font-family:Arial,sans-serif">Total Amount</span>'
+    + '<span style="font-size:22px;font-weight:900;color:#fff;font-family:Arial,sans-serif">₹'+n(t.total).toLocaleString('en-IN')+'</span>'
+    + '</div>'
+
+    + '<div style="text-align:center;font-size:10px;color:#9CA3AF;border-top:1px solid #F3F4F6;padding-top:12px;font-family:Arial,sans-serif;line-height:1.7">'
+    + 'Powered by <b style="color:#374151">Ganesh Patil</b> · ganeshpatil5810@gmail.com<br>'
+    + 'Banana Hisab — Simple. Accurate. Reliable.'
+    + '</div>';
+
+  // Show in overlay (works in APK, no popup needed)
+  var overlay = document.getElementById('printOverlay');
+  var content = document.getElementById('printContent');
+  content.innerHTML = inner;
+  overlay.style.display = 'block';
+  overlay.scrollTop = 0;
+
+  // Store for print button
+  window._lastReceiptInner = inner;
+}
+
+function doPrint() {
+  window.print();
+}
+
+function closePrintOverlay() {
+  document.getElementById('printOverlay').style.display = 'none';
+}
+
+function shareReceipt() {
+  var t = window._currentReceiptTxn;
+  if (!t) { toast('No receipt data'); return; }
+  var text = buildShare(t);
+  doShare(text);
+}
+
+function _openReceipt(html) {
+  // Fallback - no longer primary path
+  try {
+    var blob = new Blob([html], {type:'text/html'});
+    var url  = URL.createObjectURL(blob);
+    var w = window.open(url, '_blank');
+    if (w) return;
+  } catch(e){}
+}
+
+
+
+
+
+
+
+
+
+function parseAmt(id){return parseFloat((sEl(id).textContent||'').replace(/[₹,]/g,''))||0;}
+function buildShare(t){return`🍌 *Banana Hisab*\nParty: ${t.party}\nDate: ${fmtDateLong(t.date)}\n─────────────────\nGross Weight: ${t.gw?.toFixed?.(2)||t.gw} QTL\nPatti: ${t.pd} → ${t.pw?.toFixed?.(2)||t.pw} QTL\nNet Weight: ${t.nw?.toFixed?.(2)||t.nw} QTL\nDanda Weight: ${t.dw?.toFixed?.(2)||t.dw} QTL\nNet Wt. with Danda: ${t.nwd?.toFixed?.(2)||t.nwd} QTL\n─────────────────\nRate: ₹${t.rate}/QTL\nAmount: ₹${fmt(t.amt)}\nCommission: ₹${fmt(t.com)}\nMajuri: ₹${fmt(t.maj)}\n─────────────────\n*Total: ₹${t.total?.toLocaleString?.('en-IN')||t.total}*\n─────────────────\nSimple. Accurate. Reliable. — Banana Hisab`;}
+function doShare(text){
+  if(navigator.share){
+    navigator.share({title:'Banana Hisab',text:text}).then(()=>toast('Shared ✓')).catch(e=>{
+      // User cancelled or share failed – try clipboard
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(()=>toast('Copied ✓')).catch(()=>toast('Share failed'));
+      } else { toast('Share failed'); }
+    });
+  } else if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(()=>toast('Copied to clipboard ✓')).catch(()=>toast('Copy failed'));
+  } else {
+    // Last resort: select text from a temp textarea
+    const ta=document.createElement('textarea');
+    ta.value=text; ta.style.cssText='position:fixed;opacity:0;top:0;left:0';
+    document.body.appendChild(ta); ta.select();
+    try{document.execCommand('copy');toast('Copied ✓');}catch(e){toast('Tap & hold to copy');}
+    document.body.removeChild(ta);
+  }
+}
+
+// ─── PARTIES ───
+function renderParties(){
+  const list=sEl('party-list');
+  const q=sEl('partySearch').value.toLowerCase();
+  let parties=loadParties();if(q)parties=parties.filter(p=>p.name.toLowerCase().includes(q));
+  const txns=loadTxns();
+  if(!parties.length){list.innerHTML='<div class="empty"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="1.5"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.5"/></svg><p>No parties yet.<br>They auto-create when you save.</p></div>';return;}
+  list.innerHTML='<div style="padding:0 14px 8px">'+parties.map(p=>{
+    const pt=txns.filter(t=>t.party===p.name);
+    const total=pt.reduce((s,t)=>s+t.total,0);
+    return`<div class="party-item" onclick="openPartyDetail('${p.id}')"><div class="p-avatar" style="background:${p.color||'#16A34A'}">${p.name.charAt(0).toUpperCase()}</div><div class="p-info"><div class="pname">${esc(p.name)}</div><div class="pmeta">${pt.length} transactions${p.phone?' · '+p.phone:''}</div></div><div class="p-right"><div class="ptotal">₹${total.toLocaleString('en-IN')}</div></div></div>`;
+  }).join('')+'</div>';
+}
+function openAddPartySheet(){sEl('newPartyName').value='';sEl('newPartyPhone').value='';openSheet('addPartyOverlay');}
+function saveParty(){
+  const name=sEl('newPartyName').value.trim();if(!name){toast('Enter party name');return;}
+  const p=loadParties();if(p.find(x=>x.name===name)){toast('Already exists');return;}
+  p.push({id:Date.now().toString(),name,phone:sEl('newPartyPhone').value.trim(),since:new Date().toISOString(),color:COLORS[p.length%COLORS.length]});
+  saveParties(p);closeSheet('addPartyOverlay');renderParties();rebuildSuggestions();toast('Party saved ✓');
+}
+function openPartyDetail(pid){
+  const p=loadParties().find(x=>x.id===pid);if(!p)return;
+  const txns=loadTxns().filter(t=>t.party===p.name);
+  const total=txns.reduce((s,t)=>s+t.total,0);
+  const avgW=txns.length?txns.reduce((s,t)=>s+t.nwd,0)/txns.length:0;
+  currentTxnId=null;
+  set('txn-party',p.name);set('txn-date','Since '+fmtDateShort(p.since)+(p.phone?' · '+p.phone:''));set('txn-total','₹'+total.toLocaleString('en-IN'));
+  sEl('txn-rows').innerHTML=`<div class="stats-row" style="margin-bottom:12px"><div class="stat-box"><div class="sv">${txns.length}</div><div class="sl">Transactions</div></div><div class="stat-box"><div class="sv">${avgW.toFixed(2)}</div><div class="sl">Avg QTL</div></div><div class="stat-box"><div class="sv">₹${(total/1000).toFixed(1)}K</div><div class="sl">Total</div></div></div>`+txns.slice(0,8).map(t=>`<div class="hist-item" style="margin-bottom:8px" onclick="closeSheet('txnOverlay');openTxn('${t.id}')"><div class="hist-avatar" style="width:36px;height:36px;font-size:12px">${t.party.charAt(0)}</div><div class="hist-info"><div class="hname" style="font-size:13px">${fmtDate(t.date)}</div><div class="hmeta">₹${t.rate}/QTL</div></div><div class="hist-right"><div class="hamount">₹${t.total.toLocaleString('en-IN')}</div><div class="hwt">${t.nwd.toFixed(2)} QTL</div></div></div>`).join('');
+  openSheet('txnOverlay');
+}
+function rebuildSuggestions(){const dl=sEl('party-suggestions');if(dl)dl.innerHTML=loadParties().map(p=>`<option value="${esc(p.name)}">`).join('');}
+
+// ─── PROFIT ───
+let profitMode='buy';
+function setProfitMode(m){
+  profitMode=m;
+  sEl('pm-buy').classList.toggle('active',m==='buy');
+  sEl('pm-sell').classList.toggle('active',m==='sell');
+  calcProfit();
+}
+function calcProfit(){
+  const w=nv('p_weight'),buy=nv('p_buyRate'),sell=nv('p_sellRate');
+  if(!w||(!buy&&!sell)){sEl('profit-card').style.display='none';return;}
+  const ba=w*buy,sa=w*sell,profit=sa-ba,pct=ba?(profit/ba)*100:0;
+  sEl('profit-card').style.display='block';
+  set('p_buyAmt','₹'+fmt(ba));set('p_sellAmt','₹'+fmt(sa));
+  const d=sEl('profit-display');d.className='profit-box '+(profit>=0?'pos':'neg');
+  set('p_profitAmt',(profit>=0?'₹':'−₹')+fmt(Math.abs(profit)));
+  set('p_profitPct',Math.abs(pct).toFixed(2)+'%');
+  set('p_profitLbl',profit>=0?'Profit':'Loss');
+}
+
+// ─── MORE ───
+function renderMoreStats(){
+  const txns=loadTxns(),parties=loadParties();
+  const total=txns.reduce((s,t)=>s+t.total,0);
+  sEl('more-stats').innerHTML=`<div class="stat-box"><div class="sv">${txns.length}</div><div class="sl">Transactions</div></div><div class="stat-box"><div class="sv">${parties.length}</div><div class="sl">Parties</div></div><div class="stat-box"><div class="sv">₹${(total/1000).toFixed(1)}K</div><div class="sl">Total Vol.</div></div>`;
+}
+
+// ─── MISC ───
+function updateBadge(){const n=loadTxns().length,b=sEl('hist-badge');if(n){b.textContent=n>99?'99+':n;b.style.display='flex';}else b.style.display='none';}
+function confirmClearAll(){if(!confirm('Delete ALL data? This cannot be undone.'))return;_store.del(KEYS.txns);_store.del(KEYS.parties);updateBadge();renderHistory();renderParties();renderMoreStats();toast('All data cleared');}
+function openSheet(id){sEl(id).classList.add('open');}
+function closeSheet(id){sEl(id).classList.remove('open');}
+function oc(e,id){if(e.target===sEl(id))closeSheet(id);}
+function toast(msg){const t=sEl('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2300);}
+function sEl(id){return document.getElementById(id);}
+function set(id,v){const e=sEl(id);if(e)e.textContent=v;}
+function nv(id){return parseFloat(sEl(id)?.value)||0;}
+function fmt(n){return isNaN(n)?'0':n.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function sameDay(a,b){return a.getDate()===b.getDate()&&a.getMonth()===b.getMonth()&&a.getFullYear()===b.getFullYear();}
+function fmtDate(iso){const d=new Date(iso);return d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})+', '+d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});}
+function fmtDateLong(iso){const d=new Date(iso);return d.toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})+', '+d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});}
+function fmtDateShort(iso){const d=new Date(iso);return d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});}
+function toWords(n){
+  if(!n||isNaN(n))return'';
+  const ones=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'];
+  const tens=['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
+  function hw(n){if(!n)return'';if(n<20)return ones[n]+' ';if(n<100)return tens[Math.floor(n/10)]+' '+(n%10?ones[n%10]+' ':'');return ones[Math.floor(n/100)]+' Hundred '+(n%100?hw(n%100):'');}
+  let w='',r=Math.abs(Math.round(n));
+  if(r>=10000000){w+=hw(Math.floor(r/10000000))+'Crore ';r%=10000000;}
+  if(r>=100000){w+=hw(Math.floor(r/100000))+'Lakh ';r%=100000;}
+  if(r>=1000){w+=hw(Math.floor(r/1000))+'Thousand ';r%=1000;}
+  w+=hw(r);return'('+w.trim()+' Only)';
+}
+
+// ─── AUTO CALC ───
+document.addEventListener('input',function(e){
+  if(!e.target.closest('.sheet')&&!e.target.closest('.search-wrap')){
+    const gw=nv('netWeightPatti'),rate=nv('rate');
+    if(gw&&rate)calculate();
+  }
+});
+sEl('dandaType').addEventListener('change',()=>{const gw=nv('netWeightPatti'),rate=nv('rate');if(gw&&rate)calculate();});
+
+// ─── INIT ───
+applySettings(loadSettings());
+rebuildSuggestions();
+updateBadge();
+</script>
+
+<!-- ══ SHARE SHEET ══ -->
+<div class="overlay" id="shareSheetOverlay" onclick="oc(event,'shareSheetOverlay')">
+  <div class="sheet" style="padding:22px 18px 32px">
+    <div class="sheet-head">
+      <h3>📤 Share Receipt</h3>
+      <button class="x-btn" onclick="closeSheet('shareSheetOverlay')">✕</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+
+      <button onclick="doShareText()" style="display:flex;align-items:center;gap:14px;padding:15px 14px;background:#F0FDF4;border:2px solid #BBF7D0;border-radius:14px;cursor:pointer;width:100%;text-align:left">
+        <span style="width:42px;height:42px;background:#fff;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(22,163,74,0.12)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5" width="20" height="20"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        </span>
+        <div>
+          <div style="font-size:15px;font-weight:800;color:#166534;font-family:'Segoe UI','Roboto',Arial,sans-serif">Share as Text</div>
+          <div style="font-size:11px;color:#4B7C5A;font-weight:600;margin-top:2px;font-family:'Segoe UI','Roboto',Arial,sans-serif">WhatsApp, SMS or copy to clipboard</div>
+        </div>
+      </button>
+
+      <button onclick="doSharePDF()" style="display:flex;align-items:center;gap:14px;padding:15px 14px;background:#FFFBEB;border:2px solid #FDE68A;border-radius:14px;cursor:pointer;width:100%;text-align:left">
+        <span style="width:42px;height:42px;background:#fff;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(245,158,11,0.12)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2.5" width="20" height="20"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </span>
+        <div>
+          <div style="font-size:15px;font-weight:800;color:#92400E;font-family:'Segoe UI','Roboto',Arial,sans-serif">Share as Image / PDF</div>
+          <div style="font-size:11px;color:#B45309;font-weight:600;margin-top:2px;font-family:'Segoe UI','Roboto',Arial,sans-serif">Share via WhatsApp, Email, or save to device</div>
+        </div>
+      </button>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ PRINT RECEIPT OVERLAY ══ -->
+<div id="printOverlay" style="display:none;position:fixed;inset:0;background:#fff;z-index:9999;overflow-y:auto;padding:0">
+  <div id="printContent" style="max-width:420px;margin:0 auto;padding:24px 20px 32px"></div>
+  <div class="no-print" style="position:sticky;bottom:0;background:#fff;padding:12px 20px;border-top:1px solid #E5E7EB;display:flex;gap:10px;max-width:420px;margin:0 auto">
+    <button onclick="shareReceipt()" style="width:100%;background:#16A34A;color:#fff;border:none;padding:14px;border-radius:10px;font-size:15px;font-weight:800;font-family:'Segoe UI',Roboto,Arial,sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px"><svg style="flex-shrink:0" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share (WhatsApp, Email…)</button>
+    <button onclick="doPrint()" style="flex:1;background:#F0FDF4;color:#166534;border:2px solid #BBF7D0;padding:12px;border-radius:10px;font-size:13px;font-weight:800;font-family:'Segoe UI',Roboto,Arial,sans-serif">🖨 Save as PDF</button>
+    <button onclick="closePrintOverlay()" style="flex:1;background:#F3F4F6;color:#374151;border:none;padding:12px;border-radius:10px;font-size:13px;font-weight:800;font-family:'Segoe UI',Roboto,Arial,sans-serif">✕ Close</button>
+  </div>
+</div>
+
+</body>
+</html>
