@@ -42,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context.read<CalculatorProvider>().setDandaRate(settings.standardDandaRate);
       context.read<CalculatorProvider>().setCommissionRate(settings.commission);
       context.read<CalculatorProvider>().setMajuriRate(settings.majuri);
+      setState(() => _dandaType = 'Standard');
     });
   }
 
@@ -81,7 +82,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: const Text('Calculator'),
+        title: Row(
+          children: [
+            Image.asset('assets/logo.png', height: 32),
+            const SizedBox(width: 8),
+            const Text('Banana Hisab'),
+          ],
+        ),
         backgroundColor: Colors.green[700],
         foregroundColor: Colors.white,
       ),
@@ -189,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   items: const [
                                     DropdownMenuItem(value: 'Standard', child: Text('Standard')),
-                                    DropdownMenuItem(value: 'Hi', child: Text('Hi')),
+                                    DropdownMenuItem(value: 'High', child: Text('High')),
                                   ],
                                   onChanged: (value) {
                                     setState(() => _dandaType = value!);
