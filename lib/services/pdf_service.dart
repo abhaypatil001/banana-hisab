@@ -3,7 +3,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import '../models/transaction.dart';
+import '../models/transaction.dart' as models;
 import '../utils/number_utils.dart';
 import '../utils/constants.dart';
 import '../utils/date_utils.dart' as app_date;
