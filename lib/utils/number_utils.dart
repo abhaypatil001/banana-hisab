@@ -4,7 +4,7 @@ class NumberUtils {
   static final _indianFormat = NumberFormat('#,##,##,##0.00', 'en_IN');
   static final _weightFormat = NumberFormat('#,##,##,##0.00', 'en_IN');
 
-  static String formatCurrency(double amount) {
+  static String formatCurrency(double amount, {bool isTotal = false}) {
     return '₹${_indianFormat.format(amount)}';
   }
 

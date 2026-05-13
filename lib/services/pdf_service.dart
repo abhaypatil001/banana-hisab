@@ -79,16 +79,19 @@ class PdfService {
                 decoration: pw.BoxDecoration(
                   color: PdfColor.fromHex('#F0FDF4'),
                   borderRadius: pw.BorderRadius.circular(8),
+                  border: pw.Border.all(color: PdfColor.fromHex('#16A34A'), width: 1),
                 ),
                 child: pw.Row(
                   children: [
                     pw.Text(
                       'Party: ',
-                      style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.bold),
+                      style: pw.TextStyle(fontSize: 13, fontWeight: pw.FontWeight.bold, color: PdfColor.fromHex('#16A34A')),
                     ),
-                    pw.Text(
-                      transaction.party,
-                      style: const pw.TextStyle(fontSize: 14),
+                    pw.Expanded(
+                      child: pw.Text(
+                        transaction.party,
+                        style: pw.TextStyle(fontSize: 13, fontWeight: pw.FontWeight.bold),
+                      ),
                     ),
                   ],
                 ),
