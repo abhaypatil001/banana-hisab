@@ -39,11 +39,12 @@ flutter:
   
   assets:
     - assets/logo.png
+    - assets/logo.jpg
     - assets/splash.png
 
 flutter_icons:
   android: true
   ios: false
-  image_path: "assets/logo.png"
+  image_path: "assets/logo.jpg"
   adaptive_icon_background: "#FFFFFF"
-  adaptive_icon_foreground: "assets/logo.png"
+  adaptive_icon_foreground: "assets/logo.jpg"
