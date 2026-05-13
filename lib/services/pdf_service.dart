@@ -126,10 +126,10 @@ class PdfService {
                   _buildTableRow('Net Weight', '${NumberUtils.formatWeight(transaction.netWeight)} QTL', isHighlighted: true),
                   _buildTableRow('Danda (${transaction.dandaRate} Kg/QTL)', '${NumberUtils.formatWeight(transaction.dandaWeight)} QTL'),
                   _buildTableRow('Net Weight with Danda', '${NumberUtils.formatWeight(transaction.netWeightDanda)} QTL', isHighlighted: true),
-                  _buildTableRow('Rate', '₹${transaction.rate.toStringAsFixed(2)}/QTL'),
-                  _buildTableRow('Amount', '₹${_formatIndianCurrency(transaction.amount)}'),
-                  _buildTableRow('Commission', '₹${_formatIndianCurrency(transaction.commission)}'),
-                  _buildTableRow('Majuri', '₹${_formatIndianCurrency(transaction.majuri)}'),
+                  _buildTableRow('Rate', 'Rs. ${transaction.rate.toStringAsFixed(2)}/QTL'),
+                  _buildTableRow('Amount', 'Rs. ${_formatIndianCurrency(transaction.amount)}'),
+                  _buildTableRow('Commission', 'Rs. ${_formatIndianCurrency(transaction.commission)}'),
+                  _buildTableRow('Majuri', 'Rs. ${_formatIndianCurrency(transaction.majuri)}'),
                 ],
               ),
               pw.SizedBox(height: 20),
@@ -152,7 +152,7 @@ class PdfService {
                     ),
                     pw.SizedBox(height: 6),
                     pw.Text(
-                      '₹${_formatIndianCurrency(transaction.total)}',
+                      'Rs. ${_formatIndianCurrency(transaction.total)}',
                       style: pw.TextStyle(
                         fontSize: 28,
                         fontWeight: pw.FontWeight.bold,
@@ -267,13 +267,13 @@ Net Weight: ${NumberUtils.formatWeight(transaction.netWeight)} QTL
 Danda (${transaction.dandaRate} Kg/QTL): ${NumberUtils.formatWeight(transaction.dandaWeight)} QTL
 Net Weight with Danda: ${NumberUtils.formatWeight(transaction.netWeightDanda)} QTL
 
-Rate: ₹${transaction.rate.toStringAsFixed(2)}/QTL
-Amount: ₹${_formatIndianCurrency(transaction.amount)}
-Commission: ₹${_formatIndianCurrency(transaction.commission)}
-Majuri: ₹${_formatIndianCurrency(transaction.majuri)}
+Rate: Rs. ${transaction.rate.toStringAsFixed(2)}/QTL
+Amount: Rs. ${_formatIndianCurrency(transaction.amount)}
+Commission: Rs. ${_formatIndianCurrency(transaction.commission)}
+Majuri: Rs. ${_formatIndianCurrency(transaction.majuri)}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-TOTAL: ₹${_formatIndianCurrency(transaction.total)}
+TOTAL: Rs. ${_formatIndianCurrency(transaction.total)}
 ${NumberUtils.numberToWords(transaction.total)}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
